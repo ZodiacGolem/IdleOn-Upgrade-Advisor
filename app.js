@@ -1,16 +1,9 @@
 const WORKER_BASE = "https://idleon-upgrade-advisor.zodiacgolem.workers.dev";
 
 /*
-  Put your icon image files in a folder if you want actual images instead of emoji fallback.
+  Set this to your icon folder if you add PNGs.
   Example:
   const ICON_BASE = "./icons";
-
-  Suggested names:
-  - stamp-0-0.png
-  - bubble-0-0.png
-  - library-books.png
-  - library-speed.png
-  - library-max.png
 */
 const ICON_BASE = "";
 
@@ -78,19 +71,55 @@ const BUBBLE_NAMES = {
 
 const STAMP_NAME_MAP = {
   0: {
-    0:"Sword Stamp",1:"Heart Stamp",2:"Mana Stamp",3:"Tomahawk Stamp",4:"Target Stamp",
-    5:"Shield Stamp",6:"Longsword Stamp",7:"Kapow Stamp",8:"Fist Stamp",9:"Battleaxe Stamp",
-    10:"Scimitar Stamp",11:"Bullseye Stamp",12:"Feather Stamp",13:"Polearm Stamp",14:"Violence Stamp"
+    0: "Sword Stamp",
+    1: "Heart Stamp",
+    2: "Mana Stamp",
+    3: "Tomahawk Stamp",
+    4: "Target Stamp",
+    5: "Shield Stamp",
+    6: "Longsword Stamp",
+    7: "Kapow Stamp",
+    8: "Fist Stamp",
+    9: "Battleaxe Stamp",
+    10: "Scimitar Stamp",
+    11: "Bullseye Stamp",
+    12: "Feather Stamp",
+    13: "Polearm Stamp",
+    14: "Violence Stamp"
   },
   1: {
-    0:"Pickaxe Stamp",1:"Hatchet Stamp",2:"Anvil Stamp",3:"Fishing Rod Stamp",4:"Catching Net Stamp",
-    5:"Worship Stamp",6:"Trapping Stamp",7:"Duple Logs Stamp",8:"Matty Bag Stamp",9:"Smart Dirt Stamp",
-    10:"Cool Diggy Tool Stamp",11:"Oceanman Stamp",12:"Swag Swingy Stamp",13:"Alch Go Brrr Stamp",14:"Lab Tube Stamp"
+    0: "Pickaxe Stamp",
+    1: "Hatchet Stamp",
+    2: "Anvil Stamp",
+    3: "Fishing Rod Stamp",
+    4: "Catching Net Stamp",
+    5: "Worship Stamp",
+    6: "Trapping Stamp",
+    7: "Duple Logs Stamp",
+    8: "Matty Bag Stamp",
+    9: "Smart Dirt Stamp",
+    10: "Cool Diggy Tool Stamp",
+    11: "Oceanman Stamp",
+    12: "Swag Swingy Stamp",
+    13: "Alch Go Brrr Stamp",
+    14: "Lab Tube Stamp"
   },
   2: {
-    0:"Book Stamp",1:"Storage Stamp",2:"Mason Jar Stamp",3:"Pocketwatch Stamp",4:"Postage Stamp",
-    5:"Stat Graph Stamp",6:"Talent I Stamp",7:"Talent II Stamp",8:"Talent III Stamp",9:"Talent S Stamp",
-    10:"Multitool Stamp",11:"Refinery Stamp",12:"Crystal Stamp",13:"Clover Stamp",14:"DNA Stamp"
+    0: "Book Stamp",
+    1: "Storage Stamp",
+    2: "Mason Jar Stamp",
+    3: "Pocketwatch Stamp",
+    4: "Postage Stamp",
+    5: "Stat Graph Stamp",
+    6: "Talent I Stamp",
+    7: "Talent II Stamp",
+    8: "Talent III Stamp",
+    9: "Talent S Stamp",
+    10: "Multitool Stamp",
+    11: "Refinery Stamp",
+    12: "Crystal Stamp",
+    13: "Clover Stamp",
+    14: "DNA Stamp"
   }
 };
 
@@ -130,6 +159,7 @@ function $(id) {
 
 function setStatus(message, type = "idle") {
   const el = $("status");
+  if (!el) return;
   el.textContent = message;
   el.className = `status ${type}`;
 }
@@ -155,13 +185,14 @@ function average(nums) {
 
 function toSlug(input) {
   const value = String(input || "").trim();
-  const m = value.match(/^https?:\/\/([a-zA-Z0-9_-]+)\.idleonefficiency\.com\/?$/i);
-  return m ? m[1] : value;
+  const match = value.match(/^https?:\/\/([a-zA-Z0-9_-]+)\.idleonefficiency\.com\/?$/i);
+  return match ? match[1] : value;
 }
 
 async function fetchProfileJson(profileInput) {
   const slug = toSlug(profileInput);
   const url = `${WORKER_BASE}/?slug=${encodeURIComponent(slug)}`;
+
   const res = await fetch(url, { cache: "no-store" });
   const text = await res.text();
 
@@ -176,7 +207,14 @@ async function fetchProfileJson(profileInput) {
   }
 }
 
-function scoreFormula({ impact, effort, urgency = 0, accountWide = 0, catchUp = 0, confidence = 7 }) {
+function scoreFormula({
+  impact,
+  effort,
+  urgency = 0,
+  accountWide = 0,
+  catchUp = 0,
+  confidence = 7
+}) {
   return Math.round(
     impact * 8 +
     accountWide * 6 +
@@ -190,6 +228,7 @@ function scoreFormula({ impact, effort, urgency = 0, accountWide = 0, catchUp = 
 function inferStage(data) {
   const p2w = getNested(data, ["CauldronP2W"], []);
   const cauld = Array.isArray(p2w[0]) ? p2w[0] : [];
+
   const bubbleLevels = getNested(data, ["CauldronInfo"], [])
     .slice(0, 4)
     .flatMap(group => group && typeof group === "object"
@@ -230,13 +269,16 @@ function findNumbersDeep(node, path = [], hits = []) {
     node.forEach((value, index) => findNumbersDeep(value, path.concat(index), hits));
     return hits;
   }
+
   if (node && typeof node === "object") {
     Object.entries(node).forEach(([key, value]) => findNumbersDeep(value, path.concat(key), hits));
     return hits;
   }
+
   if (typeof node === "number" && Number.isFinite(node)) {
     hits.push({ path, value: node });
   }
+
   return hits;
 }
 
@@ -734,6 +776,31 @@ function dedupeRecommendations(recs) {
   return out;
 }
 
+function sortRecommendations(recs, mode) {
+  const out = [...recs];
+
+  if (mode === "score-asc") {
+    return out.sort((a, b) => a.score - b.score);
+  }
+
+  if (mode === "title-asc") {
+    return out.sort((a, b) => a.title.localeCompare(b.title));
+  }
+
+  if (mode === "title-desc") {
+    return out.sort((a, b) => b.title.localeCompare(a.title));
+  }
+
+  if (mode === "category-asc") {
+    return out.sort((a, b) => {
+      const cmp = a.category.localeCompare(b.category);
+      return cmp !== 0 ? cmp : b.score - a.score;
+    });
+  }
+
+  return out.sort((a, b) => b.score - a.score);
+}
+
 function rankRecommendations(data) {
   const stage = inferStage(data);
   const libraryState = extractLibraryState(data);
@@ -801,33 +868,11 @@ function rankRecommendations(data) {
   return { recs, categoryCounts, quality, stage, libraryState };
 }
 
-function sortRecommendations(recs, mode) {
-  const out = [...recs];
-
-  if (mode === "score-asc") {
-    return out.sort((a, b) => a.score - b.score);
-  }
-
-  if (mode === "title-asc") {
-    return out.sort((a, b) => a.title.localeCompare(b.title));
-  }
-
-  if (mode === "title-desc") {
-    return out.sort((a, b) => b.title.localeCompare(a.title));
-  }
-
-  if (mode === "category-asc") {
-    return out.sort((a, b) => {
-      const c = a.category.localeCompare(b.category);
-      return c !== 0 ? c : b.score - a.score;
-    });
-  }
-
-  return out.sort((a, b) => b.score - a.score);
-}
-
 function renderPrimary(best, stage) {
-  $("primaryContent").innerHTML = `
+  const primaryContent = $("primaryContent");
+  if (!primaryContent) return;
+
+  primaryContent.innerHTML = `
     <div class="primary-main">
       <div class="primary-icon-wrap">${renderIcon(best.iconKey, best.fallback || "⭐")}</div>
       <div>
@@ -884,6 +929,9 @@ function renderRecCard(rec, rank = null) {
 }
 
 function renderLibraryOverview(result) {
+  const libraryOverview = $("libraryOverview");
+  if (!libraryOverview) return;
+
   const library = result.libraryState;
   const cards = [
     {
@@ -916,7 +964,7 @@ function renderLibraryOverview(result) {
     }
   ];
 
-  $("libraryOverview").innerHTML = cards.map(card => `
+  libraryOverview.innerHTML = cards.map(card => `
     <div class="quality-card">
       <div class="rec-top">
         <div style="display:flex; gap:12px; align-items:center;">
@@ -931,8 +979,11 @@ function renderLibraryOverview(result) {
 }
 
 function renderCategoryBreakdown(categoryCounts) {
+  const categoryBreakdown = $("categoryBreakdown");
+  if (!categoryBreakdown) return;
+
   const maxCategoryCount = Math.max(...Object.values(categoryCounts), 1);
-  $("categoryBreakdown").innerHTML = Object.entries(categoryCounts)
+  categoryBreakdown.innerHTML = Object.entries(categoryCounts)
     .sort((a, b) => b[1] - a[1])
     .map(([name, count]) => `
       <div class="breakdown-row">
@@ -949,15 +1000,16 @@ function renderCategoryBreakdown(categoryCounts) {
 function renderRecommendations() {
   if (!lastResult) return;
 
-  const sortMode = $("sortSelect").value;
+  const recommendationList = $("recommendationList");
+  const sortSelect = $("sortSelect");
+  if (!recommendationList || !sortSelect) return;
 
   let filtered = activeFilter === "all"
     ? [...lastResult.recs]
     : lastResult.recs.filter(rec => rec.category === activeFilter);
 
-  filtered = sortRecommendations(filtered, sortMode);
-
-  $("recommendationList").innerHTML = filtered.map(rec => renderRecCard(rec)).join("");
+  filtered = sortRecommendations(filtered, sortSelect.value);
+  recommendationList.innerHTML = filtered.map(rec => renderRecCard(rec)).join("");
 }
 
 function renderResults(result) {
@@ -966,52 +1018,70 @@ function renderResults(result) {
   const bestSorted = sortRecommendations(result.recs, "score-desc");
   const best = bestSorted[0];
 
-  if (!bestSorted.length) {
+  if (!best) {
     throw new Error("No recommendations were produced from this profile.");
   }
 
-  $("emptyState").classList.add("hidden");
-  $("results").classList.remove("hidden");
+  const emptyState = $("emptyState");
+  const results = $("results");
+  if (emptyState) emptyState.classList.add("hidden");
+  if (results) results.classList.remove("hidden");
 
   renderPrimary(best, result.stage);
 
-  $("kpiTotal").textContent = result.recs.length;
-  $("kpiEasy").textContent = result.recs.filter(r => r.effort <= 2).length;
-  $("kpiBooks").textContent = result.libraryState.currentBooks != null ? result.libraryState.currentBooks : "?";
-  $("kpiBest").textContent = best.score;
+  if ($("kpiTotal")) $("kpiTotal").textContent = result.recs.length;
+  if ($("kpiEasy")) $("kpiEasy").textContent = result.recs.filter(r => r.effort <= 2).length;
+  if ($("kpiBooks")) $("kpiBooks").textContent = result.libraryState.currentBooks != null ? result.libraryState.currentBooks : "?";
+  if ($("kpiBest")) $("kpiBest").textContent = best.score;
 
   renderLibraryOverview(result);
   renderCategoryBreakdown(result.categoryCounts);
   renderRecommendations();
 
-  $("top3List").innerHTML = bestSorted.slice(0, 3).map((rec, i) => renderRecCard(rec, i + 1)).join("");
+  const top3List = $("top3List");
+  if (top3List) {
+    top3List.innerHTML = bestSorted.slice(0, 3).map((rec, i) => renderRecCard(rec, i + 1)).join("");
+  }
 
-  $("qualityList").innerHTML = result.quality.map(item => `
-    <div class="quality-card">
-      <div class="rec-top">
-        <strong>${item.label}</strong>
-        <span class="tag">${item.found ? "Yes" : "No"}</span>
+  const qualityList = $("qualityList");
+  if (qualityList) {
+    qualityList.innerHTML = result.quality.map(item => `
+      <div class="quality-card">
+        <div class="rec-top">
+          <strong>${item.label}</strong>
+          <span class="tag">${item.found ? "Yes" : "No"}</span>
+        </div>
+        <div class="muted">${item.detail}</div>
       </div>
-      <div class="muted">${item.detail}</div>
-    </div>
-  `).join("");
+    `).join("");
+  }
 }
 
 function clearResults() {
-  $("results").classList.add("hidden");
-  $("emptyState").classList.remove("hidden");
-  $("primaryContent").innerHTML = "";
-  $("top3List").innerHTML = "";
-  $("recommendationList").innerHTML = "";
-  $("libraryOverview").innerHTML = "";
-  $("categoryBreakdown").innerHTML = "";
-  $("qualityList").innerHTML = "";
+  const results = $("results");
+  const emptyState = $("emptyState");
+  const primaryContent = $("primaryContent");
+  const top3List = $("top3List");
+  const recommendationList = $("recommendationList");
+  const libraryOverview = $("libraryOverview");
+  const categoryBreakdown = $("categoryBreakdown");
+  const qualityList = $("qualityList");
+
+  if (results) results.classList.add("hidden");
+  if (emptyState) emptyState.classList.remove("hidden");
+  if (primaryContent) primaryContent.innerHTML = "";
+  if (top3List) top3List.innerHTML = "";
+  if (recommendationList) recommendationList.innerHTML = "";
+  if (libraryOverview) libraryOverview.innerHTML = "";
+  if (categoryBreakdown) categoryBreakdown.innerHTML = "";
+  if (qualityList) qualityList.innerHTML = "";
+
   lastResult = null;
 }
 
 async function analyze() {
-  const jsonInput = $("jsonInput").value.trim();
-  const profileInput = $("profileInput").value.trim();
+  const jsonInput = $("jsonInput")?.value.trim() || "";
+  const profileInput = $("profileInput")?.value.trim() || "";
 
   try {
     setStatus("Loading profile data...", "loading");
@@ -1031,18 +1101,23 @@ async function analyze() {
     setStatus(`Loaded ${result.recs.length} recommendations.`, "success");
   } catch (err) {
     setStatus(err.message || "Something went wrong.", "error");
+    console.error(err);
   }
 }
 
 function loadDemo() {
-  $("jsonInput").value = JSON.stringify(demoData, null, 2);
-  $("profileInput").value = "";
+  const jsonInput = $("jsonInput");
+  const profileInput = $("profileInput");
+  if (jsonInput) jsonInput.value = JSON.stringify(demoData, null, 2);
+  if (profileInput) profileInput.value = "";
   analyze();
 }
 
 function clearAll() {
-  $("profileInput").value = "";
-  $("jsonInput").value = "";
+  const profileInput = $("profileInput");
+  const jsonInput = $("jsonInput");
+  if (profileInput) profileInput.value = "";
+  if (jsonInput) jsonInput.value = "";
   clearResults();
   setStatus("Ready.", "idle");
 }
@@ -1056,7 +1131,13 @@ document.querySelectorAll(".filter-btn").forEach(btn => {
   });
 });
 
-$("sortSelect").addEventListener("change", renderRecommendations);
-$("analyzeBtn").addEventListener("click", analyze);
-$("demoBtn").addEventListener("click", loadDemo);
-$("clearBtn").addEventListener("click", clearAll);
+const sortSelect = $("sortSelect");
+if (sortSelect) sortSelect.addEventListener("change", renderRecommendations);
+
+const analyzeBtn = $("analyzeBtn");
+const demoBtn = $("demoBtn");
+const clearBtn = $("clearBtn");
+
+if (analyzeBtn) analyzeBtn.addEventListener("click", analyze);
+if (demoBtn) demoBtn.addEventListener("click", loadDemo);
+if (clearBtn) clearBtn.addEventListener("click", clearAll);
