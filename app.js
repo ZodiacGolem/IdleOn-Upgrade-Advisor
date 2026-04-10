@@ -257,11 +257,14 @@ function inferStage(data) {
 }
 
 function makeBubbleName(cauldronIndex, bubbleIndex) {
-  return BUBBLE_NAMES[cauldronIndex]?.[bubbleIndex] || `Bubble ${bubbleIndex}`;
+  const cauldronName = CAULDRON_NAMES[cauldronIndex] || `Cauldron ${cauldronIndex + 1}`;
+  const bubbleName = BUBBLE_NAMES[cauldronIndex]?.[bubbleIndex] || `Bubble ${bubbleIndex + 1}`;
+  return `${cauldronName} - ${bubbleName}`;
 }
 
 function makeStampName(tabIndex, slotIndex) {
-  return STAMP_NAME_MAP[tabIndex]?.[slotIndex] || `Stamp tab ${tabIndex + 1} slot ${slotIndex}`;
+  const stampName = STAMP_NAME_MAP[tabIndex]?.[slotIndex] || `Stamp ${slotIndex + 1}`;
+  return `Stamp Tab ${tabIndex + 1} - ${stampName}`;
 }
 
 function findNumbersDeep(node, path = [], hits = []) {
