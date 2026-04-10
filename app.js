@@ -1,5 +1,19 @@
 const WORKER_BASE = "https://idleon-upgrade-advisor.zodiacgolem.workers.dev";
 
+/*
+  Set this to wherever you host icon PNGs.
+
+  Example if you add them to your repo:
+  const ICON_BASE = "./icons";
+
+  Then paths would look like:
+  ./icons/aUpgradesO0.png
+  ./icons/aUpgradesG6.png
+
+  Leave as "" if you want the UI to work without images for now.
+*/
+const ICON_BASE = "";
+
 const demoData = {
   "CauldronP2W": [
     [35, 20, 15, 40, 25, 20, 30, 18, 10, 50, 30, 22],
@@ -22,6 +36,194 @@ const demoData = {
     { "0": 18, "length": 1 },
     { "0": 30, "1": 33, "length": 2 }
   ]
+};
+
+const CAULDRON_SHORT = ["O", "G", "P", "Y"];
+const CAULDRON_NAMES = ["Power", "Quicc", "High-IQ", "Kazam"];
+
+const BUBBLE_NAMES = {
+  0: [
+    "Roid Ragin",
+    "Warriors Rule",
+    "Hearty Diggy",
+    "Wyoming Blood",
+    "Reely Smart",
+    "Big Meaty Claws",
+    "Sploosh Sploosh",
+    "Stronk Tools",
+    "FMJ",
+    "Bappity Boopity",
+    "Brittley Spears",
+    "Call Me Bob",
+    "Carpenter",
+    "Buff Boi Talent",
+    "Orange Bargain",
+    "Penny Of Strength",
+    "Multorange",
+    "Dream Of Ironfish",
+    "Shimmeron",
+    "Bite But Not Chew",
+    "Spear Powah",
+    "Slabi Orefish",
+    "Gamer At Heart",
+    "Slabi Strength",
+    "Power Trione",
+    "Farquad Force",
+    "Endgame Eff I",
+    "Tome Strength",
+    "Essence Boost",
+    "Crop Chapter"
+  ],
+  1: [
+    "Swift Steppin",
+    "Archer Or Bust",
+    "Hammer Hammer",
+    "Lil Big Damage",
+    "Anvilnomics",
+    "Quick Slap",
+    "Sanic Tools",
+    "Bug²",
+    "Shaquracy",
+    "Cheap Shot",
+    "Bow Jack",
+    "Call Me Ash",
+    "Cuz I Catch Em All",
+    "Fast Boi Talent",
+    "Green Bargain",
+    "Dollar Of Agility",
+    "Premigreen",
+    "Fly In Mind",
+    "Kill Per Kill",
+    "AFK Expexp",
+    "Bow Power",
+    "Slabo Critterbug",
+    "Sailor At Heart",
+    "Slabo Agility",
+    "Power Tritwo",
+    "Quickdraw Quiver",
+    "Essence Boost",
+    "Endgame Eff II",
+    "Tome Agility",
+    "Stealth Chapter"
+  ],
+  2: [
+    "Stable Jenius",
+    "Mage Is Best",
+    "Hocus Choppus",
+    "Molto Loggo",
+    "Noodubble",
+    "Name I Guess",
+    "Le Brain Tools",
+    "Cookin Roadkill",
+    "Brewstachio",
+    "All For Kill",
+    "Matty Stafford",
+    "Call Me Pope",
+    "Gospel Leader",
+    "Smart Boi Talent",
+    "Purple Bargain",
+    "Nickel Of Wisdom",
+    "Severapurple",
+    "Tree Sleeper",
+    "Hyperswift",
+    "Matrix Evolved",
+    "Wand Pawur",
+    "Slabe Logsoul",
+    "Pious At Heart",
+    "Slabe Wisdom",
+    "Power Trithree",
+    "Smarter Spells",
+    "Endgame Eff III",
+    "Essence Boost",
+    "Tome Wisdom",
+    "Essence Chapter"
+  ],
+  3: [
+    "Lotto Skills",
+    "Droppin Loads",
+    "Startue Exp",
+    "Level Up Gift",
+    "Prowesessary",
+    "Stamp Tramp",
+    "Undeveloped Costs",
+    "Da Daily Drip",
+    "Grind Time",
+    "Laaarrrryyyy",
+    "Cogs For Hands",
+    "Sample It",
+    "Big Game Hunter",
+    "Ignore Overdues",
+    "Yellow Bargain",
+    "Mr Massacre",
+    "Egg Ink",
+    "Diamond Chef",
+    "Card Champ",
+    "Petting The Rift",
+    "Boaty Bubble",
+    "Big P",
+    "Bit By Bit",
+    "Gifts Abound",
+    "Atom Split",
+    "Cropius Mapper",
+    "Essence Boost",
+    "Hinge Buster",
+    "Ninja Looter",
+    "Lo Cost Mo Jade"
+  ]
+};
+
+const STAMP_NAME_MAP = {
+  0: {
+    0: "Sword Stamp",
+    1: "Heart Stamp",
+    2: "Mana Stamp",
+    3: "Tomahawk Stamp",
+    4: "Target Stamp",
+    5: "Shield Stamp",
+    6: "Longsword Stamp",
+    7: "Kapow Stamp",
+    8: "Fist Stamp",
+    9: "Battleaxe Stamp",
+    10: "Scimitar Stamp",
+    11: "Bullseye Stamp",
+    12: "Feather Stamp",
+    13: "Polearm Stamp",
+    14: "Violence Stamp"
+  },
+  1: {
+    0: "Pickaxe Stamp",
+    1: "Hatchet Stamp",
+    2: "Anvil Stamp",
+    3: "Fishing Rod Stamp",
+    4: "Catching Net Stamp",
+    5: "Worship Stamp",
+    6: "Trapping Stamp",
+    7: "Duple Logs Stamp",
+    8: "Matty Bag Stamp",
+    9: "Smart Dirt Stamp",
+    10: "Cool Diggy Tool Stamp",
+    11: "Oceanman Stamp",
+    12: "Swag Swingy Stamp",
+    13: "Alch Go Brrr Stamp",
+    14: "Lab Tube Stamp"
+  },
+  2: {
+    0: "Book Stamp",
+    1: "Storage Stamp",
+    2: "Mason Jar Stamp",
+    3: "Pocketwatch Stamp",
+    4: "Postage Stamp",
+    5: "Stat Graph Stamp",
+    6: "Talent I Stamp",
+    7: "Talent II Stamp",
+    8: "Talent III Stamp",
+    9: "Talent S Stamp",
+    10: "Multitool Stamp",
+    11: "Refinery Stamp",
+    12: "Crystal Stamp",
+    13: "Clover Stamp",
+    14: "DNA Stamp"
+  }
 };
 
 function $(id) {
@@ -72,10 +274,6 @@ async function fetchProfileJson(profileInput) {
   }
 }
 
-function clamp(value, min, max) {
-  return Math.max(min, Math.min(max, value));
-}
-
 function average(nums) {
   if (!nums.length) return 0;
   return nums.reduce((a, b) => a + b, 0) / nums.length;
@@ -119,15 +317,40 @@ function inferStage(data) {
       : []
     );
 
-  const avgCauld = average(cauld.map(Number).filter(n => Number.isFinite(n)));
-  const avgBubble = average(bubbleLevels.filter(n => Number.isFinite(n)));
-  const avgStamp = average(stampLevels.filter(n => Number.isFinite(n)));
+  const avgCauld = average(cauld.map(Number).filter(Number.isFinite));
+  const avgBubble = average(bubbleLevels.filter(Number.isFinite));
+  const avgStamp = average(stampLevels.filter(Number.isFinite));
 
   const stageScore = avgCauld * 0.5 + avgBubble * 1.2 + avgStamp * 0.9;
 
   if (stageScore < 22) return "early";
   if (stageScore < 50) return "mid";
   return "late";
+}
+
+function makeIconUrl(iconKey) {
+  if (!ICON_BASE) return "";
+  return `${ICON_BASE.replace(/\/$/, "")}/${iconKey}.png`;
+}
+
+function fallbackEmoji(category) {
+  if (category === "Alchemy P2W") return "🧪";
+  if (category === "Stamps") return "📮";
+  if (category === "Bubbles") return "🫧";
+  return "⭐";
+}
+
+function makeBubbleName(cauldronIndex, bubbleIndex) {
+  return BUBBLE_NAMES[cauldronIndex]?.[bubbleIndex] || `Bubble ${bubbleIndex}`;
+}
+
+function makeBubbleIcon(cauldronIndex, bubbleIndex) {
+  const prefix = CAULDRON_SHORT[cauldronIndex] || "O";
+  return `aUpgrades${prefix}${bubbleIndex}`;
+}
+
+function makeStampName(tabIndex, slotIndex) {
+  return STAMP_NAME_MAP[tabIndex]?.[slotIndex] || `Stamp tab ${tabIndex + 1} slot ${slotIndex}`;
 }
 
 function buildAlchemyP2WRecs(data, stage) {
@@ -156,7 +379,8 @@ function buildAlchemyP2WRecs(data, stage) {
         cap: 150,
         impact: 9.5,
         accountWide: 9.5,
-        preferredBelow: 110
+        preferredBelow: 110,
+        iconKey: `cauldron-speed-${idx}`
       },
       {
         label: "New Bubble",
@@ -164,7 +388,8 @@ function buildAlchemyP2WRecs(data, stage) {
         cap: 125,
         impact: 9.2,
         accountWide: 9.0,
-        preferredBelow: 95
+        preferredBelow: 95,
+        iconKey: `cauldron-bubble-${idx}`
       },
       {
         label: "Boost Req",
@@ -172,7 +397,8 @@ function buildAlchemyP2WRecs(data, stage) {
         cap: 100,
         impact: 6.5,
         accountWide: 7.0,
-        preferredBelow: 75
+        preferredBelow: 75,
+        iconKey: `cauldron-boost-${idx}`
       }
     ].forEach((item) => {
       const gap = Math.max(0, item.cap - item.level);
@@ -184,9 +410,7 @@ function buildAlchemyP2WRecs(data, stage) {
         progress < 0.7 ? 3 :
         progress < 0.9 ? 5 : 7;
 
-      const urgency =
-        item.level < item.preferredBelow ? 8 : 4;
-
+      const urgency = item.level < item.preferredBelow ? 8 : 4;
       const catchUp =
         gap >= item.cap * 0.5 ? 8 :
         gap >= item.cap * 0.3 ? 6 : 3;
@@ -208,7 +432,9 @@ function buildAlchemyP2WRecs(data, stage) {
         confidence: 9,
         score,
         why: `${item.label} is still low at ${item.level}/${item.cap}, and this is one of the broadest account-wide progression upgrades.`,
-        detail: `Gap to cap: ${gap}. Best-effort priority favors broad alchemy progression.`
+        detail: `Gap to cap: ${gap}.`,
+        iconUrl: makeIconUrl(item.iconKey),
+        fallback: "🧪"
       });
     });
   });
@@ -223,14 +449,16 @@ function buildAlchemyP2WRecs(data, stage) {
         level: values[0],
         cap: 100,
         impact: 7.8,
-        accountWide: 8.0
+        accountWide: 8.0,
+        iconKey: `liquid-regen-${idx}`
       },
       {
         label: "Liquid Capacity",
         level: values[1],
         cap: 80,
         impact: 7.0,
-        accountWide: 7.5
+        accountWide: 7.5,
+        iconKey: `liquid-cap-${idx}`
       }
     ].forEach((item) => {
       const gap = Math.max(0, item.cap - item.level);
@@ -265,7 +493,9 @@ function buildAlchemyP2WRecs(data, stage) {
         confidence: 8,
         score,
         why: `${item.label} is behind at ${item.level}/${item.cap}, making your liquid flow worse than it should be.`,
-        detail: `Gap to cap: ${gap}. This tends to smooth many future alchemy upgrades.`
+        detail: `Gap to cap: ${gap}.`,
+        iconUrl: makeIconUrl(item.iconKey),
+        fallback: "💧"
       });
     });
   });
@@ -277,14 +507,16 @@ function buildAlchemyP2WRecs(data, stage) {
         level: Number(vial[0]),
         cap: 15,
         impact: 6.2,
-        accountWide: 6.4
+        accountWide: 6.4,
+        iconKey: "vial-attempts"
       },
       {
         label: "Vial RNG",
         level: Number(vial[1]),
         cap: 45,
         impact: 5.2,
-        accountWide: 5.5
+        accountWide: 5.5,
+        iconKey: "vial-rng"
       }
     ].forEach((item) => {
       const gap = Math.max(0, item.cap - item.level);
@@ -294,11 +526,8 @@ function buildAlchemyP2WRecs(data, stage) {
         item.level < item.cap * 0.35 ? 2 :
         item.level < item.cap * 0.75 ? 3 : 5;
 
-      const urgency =
-        item.label === "Vial Attempts" ? 6 : 4;
-
-      const catchUp =
-        gap > item.cap * 0.4 ? 6 : 3;
+      const urgency = item.label === "Vial Attempts" ? 6 : 4;
+      const catchUp = gap > item.cap * 0.4 ? 6 : 3;
 
       const score = scoreFormula({
         impact: item.impact,
@@ -317,7 +546,9 @@ function buildAlchemyP2WRecs(data, stage) {
         confidence: 8,
         score,
         why: `${item.label} is below a healthy level at ${item.level}/${item.cap} and is usually a simple account-wide cleanup.`,
-        detail: `Gap to cap: ${gap}.`
+        detail: `Gap to cap: ${gap}.`,
+        iconUrl: makeIconUrl(item.iconKey),
+        fallback: "🧴"
       });
     });
   }
@@ -341,15 +572,13 @@ function buildStampRecs(data, stage) {
     Object.entries(tab).forEach(([key, value]) => {
       if (key === "length") return;
 
+      const slotIndex = Number(key);
       const cur = Number(value);
       const mx = Number(maxTab[key] ?? cur);
       const gap = Math.max(0, mx - cur);
 
       if (cur <= 0 || gap <= 0) return;
-
-      const isEasyFinish = gap <= 3;
-      const isReasonableFinish = gap <= 8;
-      if (!isReasonableFinish) return;
+      if (gap > 8) return;
 
       const effort =
         gap <= 2 ? 1 :
@@ -361,7 +590,7 @@ function buildStampRecs(data, stage) {
         tabIndex === 1 ? 6.0 : 5.0;
 
       const urgency =
-        isEasyFinish ? 8 :
+        gap <= 3 ? 8 :
         gap <= 5 ? 6 : 4;
 
       const catchUp =
@@ -378,14 +607,16 @@ function buildStampRecs(data, stage) {
       });
 
       recs.push({
-        title: `Stamp tab ${tabIndex + 1} slot ${key}`,
+        title: makeStampName(tabIndex, slotIndex),
         category: "Stamps",
         impact: Math.round(impact),
         effort,
         confidence: 7,
         score,
         why: `This stamp is near its current max (${cur}/${mx}), which makes it one of the easier account-wide cleanup wins available.`,
-        detail: `Missing ${gap} levels to current cap.`
+        detail: `Missing ${gap} levels to current cap.`,
+        iconUrl: makeIconUrl(`stamp-${tabIndex}-${slotIndex}`),
+        fallback: "📮"
       });
     });
   });
@@ -403,6 +634,8 @@ function buildBubbleRecs(data, stage) {
 
     Object.entries(group).forEach(([key, value]) => {
       if (key === "length") return;
+
+      const bubbleIndex = Number(key);
       const lvl = Number(value);
 
       if (!Number.isFinite(lvl) || lvl < 1) return;
@@ -437,14 +670,16 @@ function buildBubbleRecs(data, stage) {
       });
 
       recs.push({
-        title: `Cauldron ${groupIndex + 1} bubble ${key}`,
+        title: makeBubbleName(groupIndex, bubbleIndex),
         category: "Bubbles",
         impact: Math.round(impact),
         effort,
         confidence: 6,
         score,
-        why: `Bubble level ${lvl} is in a range where a few more levels are often still fast, efficient gains.`,
-        detail: `Best-effort bubble recommendation based on level band priority.`
+        why: `${makeBubbleName(groupIndex, bubbleIndex)} is at level ${lvl}, which is still in a strong catch-up range for quick value.`,
+        detail: `${CAULDRON_NAMES[groupIndex]} Cauldron bubble.`,
+        iconUrl: makeIconUrl(makeBubbleIcon(groupIndex, bubbleIndex)),
+        fallback: "🫧"
       });
     });
   });
@@ -506,7 +741,7 @@ function rankRecommendations(data) {
     {
       label: "Bubble data",
       found: Array.isArray(bubbles) && bubbles.length > 0,
-      detail: Array.isArray(bubbles) && bubbles.length > 0 ? "Detected and used for mid-level catch-up logic." : "Missing from payload."
+      detail: Array.isArray(bubbles) && bubbles.length > 0 ? "Detected and used for named bubble scoring." : "Missing from payload."
     },
     {
       label: "Estimated account stage",
@@ -523,26 +758,98 @@ function rankRecommendations(data) {
   return { recs: deduped, categoryCounts, quality, stage };
 }
 
+function renderIcon(iconUrl, fallback) {
+  if (!iconUrl) {
+    return `<div class="rec-fallback">${fallback}</div>`;
+  }
+
+  return `
+    <img
+      class="rec-icon"
+      src="${iconUrl}"
+      alt=""
+      loading="lazy"
+      onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+    >
+    <div class="rec-fallback" style="display:none">${fallback}</div>
+  `;
+}
+
 function renderRecCard(rec, rank = null) {
   return `
     <article class="rec-card">
-      <div class="rec-top">
-        <div>
-          ${rank ? `<div class="pill">#${rank}</div>` : ""}
-          <h4 class="rec-title">${rec.title}</h4>
-          <div class="muted">${rec.why}</div>
-          ${rec.detail ? `<div class="muted" style="margin-top:8px;font-size:.92rem">${rec.detail}</div>` : ""}
+      <div class="rec-main">
+        <div class="rec-icon-wrap">
+          ${renderIcon(rec.iconUrl, rec.fallback || fallbackEmoji(rec.category))}
         </div>
-        <div class="score-pill">Score ${rec.score}</div>
-      </div>
-      <div class="rec-meta">
-        <span class="tag">${rec.category}</span>
-        <span class="tag">Impact ${rec.impact}</span>
-        <span class="tag">Effort ${rec.effort}</span>
-        <span class="tag">Confidence ${rec.confidence}</span>
+        <div>
+          <div class="rec-top">
+            <div>
+              ${rank ? `<div class="pill">#${rank}</div>` : ""}
+              <h4 class="rec-title">${rec.title}</h4>
+              <div class="muted">${rec.why}</div>
+              ${rec.detail ? `<div class="muted" style="margin-top:8px;font-size:.92rem">${rec.detail}</div>` : ""}
+            </div>
+            <div class="score-pill">Score ${rec.score}</div>
+          </div>
+          <div class="rec-meta">
+            <span class="tag">${rec.category}</span>
+            <span class="tag">Impact ${rec.impact}</span>
+            <span class="tag">Effort ${rec.effort}</span>
+            <span class="tag">Confidence ${rec.confidence}</span>
+          </div>
+        </div>
       </div>
     </article>
   `;
+}
+
+function renderPrimary(best, stage) {
+  const primaryHtml = `
+    <div class="primary-main">
+      <div class="primary-icon-wrap">
+        ${
+          best.iconUrl
+            ? `
+              <img
+                class="primary-icon"
+                src="${best.iconUrl}"
+                alt=""
+                loading="lazy"
+                onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';"
+              >
+              <div class="rec-fallback" style="display:none">${best.fallback || fallbackEmoji(best.category)}</div>
+            `
+            : `<div class="rec-fallback">${best.fallback || fallbackEmoji(best.category)}</div>`
+        }
+      </div>
+      <div>
+        <div class="card-top">
+          <span id="primaryCategory" class="pill">${best.category} • ${stage}</span>
+          <span id="primaryScore" class="score-pill">Score ${best.score}</span>
+        </div>
+        <h2 id="primaryTitle">${best.title}</h2>
+        <p id="primaryWhy" class="muted">${best.why}</p>
+      </div>
+    </div>
+
+    <div class="stat-grid">
+      <div class="mini-stat">
+        <span>Impact</span>
+        <strong id="primaryImpact">${best.impact}</strong>
+      </div>
+      <div class="mini-stat">
+        <span>Effort</span>
+        <strong id="primaryEffort">${best.effort}</strong>
+      </div>
+      <div class="mini-stat">
+        <span>Confidence</span>
+        <strong id="primaryConfidence">${best.confidence}</strong>
+      </div>
+    </div>
+  `;
+
+  document.querySelector(".primary-card").innerHTML = primaryHtml;
 }
 
 function renderResults(result) {
@@ -556,13 +863,7 @@ function renderResults(result) {
   $("emptyState").classList.add("hidden");
   $("results").classList.remove("hidden");
 
-  $("primaryCategory").textContent = `${best.category} • ${stage}`;
-  $("primaryScore").textContent = `Score ${best.score}`;
-  $("primaryTitle").textContent = best.title;
-  $("primaryWhy").textContent = best.why;
-  $("primaryImpact").textContent = best.impact;
-  $("primaryEffort").textContent = best.effort;
-  $("primaryConfidence").textContent = best.confidence;
+  renderPrimary(best, stage);
 
   $("kpiTotal").textContent = recs.length;
   $("kpiEasy").textContent = recs.filter(r => r.effort <= 2).length;
