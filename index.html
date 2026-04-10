@@ -9,38 +9,124 @@
 <body>
   <div class="page">
     <header class="hero">
-      <h1>IdleOn Upgrade Advisor</h1>
-      <p class="subtitle">
-        Cleaner upgrade recommendations with stamps, bubbles, and library tracking.
-      </p>
+      <div>
+        <p class="eyebrow">IdleOn Tool</p>
+        <h1>IdleOn Upgrade Advisor</h1>
+        <p class="subtitle">
+          Cleaner upgrade recommendations with named stamps, named bubbles, library tracking, icons, and best-upgrade sorting.
+        </p>
+      </div>
     </header>
 
     <main class="layout">
-      <aside class="panel">
-        <input id="profileInput" placeholder="Profile slug or URL">
-        <textarea id="jsonInput" placeholder="Or paste JSON"></textarea>
+      <aside class="panel input-panel">
+        <h2>Load Profile</h2>
+
+        <label for="profileInput">Profile URL or slug</label>
+        <input id="profileInput" type="text" placeholder="playername or https://playername.idleonefficiency.com">
 
         <div class="button-row">
-          <button id="analyzeBtn">Analyze</button>
-          <button id="demoBtn">Demo</button>
-          <button id="clearBtn">Clear</button>
+          <button id="analyzeBtn">Analyze Profile</button>
+          <button id="demoBtn" class="secondary">Load Demo</button>
+          <button id="clearBtn" class="secondary">Clear</button>
         </div>
 
-        <div id="status">Ready</div>
+        <details class="json-box">
+          <summary>Paste Raw JSON instead</summary>
+          <textarea id="jsonInput" rows="12" placeholder="Paste raw JSON here"></textarea>
+        </details>
+
+        <div class="help-box">
+          <strong>What this version shows</strong>
+          <p>
+            Stamp names, bubble names, library books, library speed, max books, icons, and recommendations sorted by best score.
+          </p>
+        </div>
+
+        <div id="status" class="status idle">Ready.</div>
       </aside>
 
-      <section id="results" class="hidden">
-        <div class="kpi-grid">
-          <div>Books: <strong id="kpiBooks">?</strong></div>
-          <div>Total: <strong id="kpiTotal">0</strong></div>
-          <div>Easy: <strong id="kpiEasy">0</strong></div>
+      <section class="result-column">
+        <div id="emptyState" class="panel empty-state">
+          <div>
+            <h2>No profile loaded</h2>
+            <p>Analyze a profile to see best upgrades, library overview, and named recommendations.</p>
+          </div>
         </div>
 
-        <h2>Library</h2>
-        <div id="library"></div>
+        <div id="results" class="hidden">
+          <section class="primary-card">
+            <div id="primaryContent"></div>
+          </section>
 
-        <h2>Recommendations</h2>
-        <div id="recommendations"></div>
+          <section class="kpi-grid">
+            <div class="kpi">
+              <span>Total recommendations</span>
+              <strong id="kpiTotal">0</strong>
+            </div>
+            <div class="kpi">
+              <span>Easy wins</span>
+              <strong id="kpiEasy">0</strong>
+            </div>
+            <div class="kpi">
+              <span>Current books</span>
+              <strong id="kpiBooks">?</strong>
+            </div>
+            <div class="kpi">
+              <span>Best score</span>
+              <strong id="kpiBest">0</strong>
+            </div>
+          </section>
+
+          <section class="two-col">
+            <div class="panel">
+              <h3>Library Overview</h3>
+              <div id="libraryOverview" class="stack"></div>
+            </div>
+
+            <div class="panel">
+              <h3>Category Breakdown</h3>
+              <div id="categoryBreakdown" class="stack"></div>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="section-head">
+              <h3>Recommendations</h3>
+              <div class="toolbar">
+                <div class="filter-row">
+                  <button class="filter-btn active" data-filter="all">All</button>
+                  <button class="filter-btn" data-filter="Stamps">Stamps</button>
+                  <button class="filter-btn" data-filter="Bubbles">Bubbles</button>
+                  <button class="filter-btn" data-filter="Alchemy P2W">Alchemy</button>
+                  <button class="filter-btn" data-filter="Library">Library</button>
+                </div>
+
+                <select id="sortSelect" class="sort-select">
+                  <option value="score-desc">Best score first</option>
+                  <option value="score-asc">Worst score first</option>
+                  <option value="title-asc">Name A-Z</option>
+                  <option value="title-desc">Name Z-A</option>
+                  <option value="category-asc">Category A-Z</option>
+                </select>
+              </div>
+            </div>
+
+            <div id="recommendationList" class="stack"></div>
+          </section>
+
+          <section class="two-col">
+            <div class="panel">
+              <h3>Top 3 Upgrades</h3>
+              <div id="top3List" class="stack"></div>
+            </div>
+
+            <div class="panel">
+              <h3>Data Quality</h3>
+              <div id="qualityList" class="stack"></div>
+            </div>
+          </section>
+        </div>
       </section>
     </main>
   </div>
