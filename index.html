@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>IdleOn Upgrade Advisor</title>
+  <meta name="description" content="Analyze a public IdleOn profile and get upgrade recommendations.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">IdleOn Tool</p>
+        <h1>IdleOn Upgrade Advisor</h1>
+        <p class="subtitle">
+          Paste a public IdleOn Efficiency profile URL or slug and get a ranked list of the best next upgrades.
+        </p>
+      </div>
+      <a class="ghost-btn" href="https://zodiacgolem.github.io/idleon-upgrade-advisor/" target="_blank" rel="noreferrer">
+        Open Live Site
+      </a>
+    </header>
+
+    <main class="layout">
+      <section class="panel input-panel">
+        <h2>Load Profile</h2>
+
+        <label for="profileInput">Profile URL or slug</label>
+        <input
+          id="profileInput"
+          type="text"
+          placeholder="zodiacgolem_1 or https://zodiacgolem_1.idleonefficiency.com"
+        >
+
+        <div class="button-row">
+          <button id="analyzeBtn">Analyze Profile</button>
+          <button id="demoBtn" class="secondary">Load Demo</button>
+          <button id="clearBtn" class="secondary">Clear</button>
+        </div>
+
+        <details class="json-box">
+          <summary>Paste Raw JSON instead</summary>
+          <textarea
+            id="jsonInput"
+            rows="12"
+            placeholder="Paste the Raw Data JSON here if direct profile lookup fails"
+          ></textarea>
+        </details>
+
+        <div class="help-box">
+          <strong>How it works</strong>
+          <p>
+            This site sends the profile slug to your Cloudflare Worker, which fetches the public IdleOn JSON and returns it to the app.
+          </p>
+        </div>
+
+        <div id="status" class="status idle">Ready.</div>
+      </section>
+
+      <section class="panel result-panel">
+        <div id="emptyState" class="empty-state">
+          <h2>No profile loaded</h2>
+          <p>Analyze a profile to see the best next upgrade, top 3 recommendations, and backup upgrades.</p>
+        </div>
+
+        <div id="results" class="hidden">
+          <div class="primary-card">
+            <div class="card-top">
+              <span id="primaryCategory" class="pill">Category</span>
+              <span id="primaryScore" class="score-pill">Score 0</span>
+            </div>
+            <h2 id="primaryTitle">Best next upgrade</h2>
+            <p id="primaryWhy" class="muted"></p>
+
+            <div class="stat-grid">
+              <div class="mini-stat">
+                <span>Impact</span>
+                <strong id="primaryImpact">0</strong>
+              </div>
+              <div class="mini-stat">
+                <span>Effort</span>
+                <strong id="primaryEffort">0</strong>
+              </div>
+              <div class="mini-stat">
+                <span>Confidence</span>
+                <strong id="primaryConfidence">0</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="kpi-grid">
+            <div class="kpi">
+              <span>Total recommendations</span>
+              <strong id="kpiTotal">0</strong>
+            </div>
+            <div class="kpi">
+              <span>Easy wins</span>
+              <strong id="kpiEasy">0</strong>
+            </div>
+            <div class="kpi">
+              <span>Categories</span>
+              <strong id="kpiCategories">0</strong>
+            </div>
+            <div class="kpi">
+              <span>Best score</span>
+              <strong id="kpiBest">0</strong>
+            </div>
+          </div>
+
+          <div class="two-col">
+            <section class="subpanel">
+              <h3>Top 3 Upgrades</h3>
+              <div id="top3List" class="stack"></div>
+            </section>
+
+            <section class="subpanel">
+              <h3>Category Breakdown</h3>
+              <div id="categoryBreakdown" class="stack"></div>
+            </section>
+          </div>
+
+          <div class="two-col">
+            <section class="subpanel">
+              <h3>Backup Upgrades</h3>
+              <div id="backupList" class="stack"></div>
+            </section>
+
+            <section class="subpanel">
+              <h3>Data Quality</h3>
+              <div id="qualityList" class="stack"></div>
+            </section>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
