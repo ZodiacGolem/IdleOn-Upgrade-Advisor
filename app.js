@@ -69,57 +69,171 @@ const BUBBLE_NAMES = {
   ]
 };
 
+/*
+  Dual stamp map:
+  - official: keyed to wiki slot numbering where holes can exist
+  - compact: fallback for payloads that appear compressed/contiguous
+*/
 const STAMP_NAME_MAP = {
-  0: {
-    0: "Sword Stamp",
-    1: "Heart Stamp",
-    2: "Mana Stamp",
-    3: "Tomahawk Stamp",
-    4: "Target Stamp",
-    5: "Shield Stamp",
-    6: "Longsword Stamp",
-    7: "Kapow Stamp",
-    8: "Fist Stamp",
-    9: "Battleaxe Stamp",
-    10: "Scimitar Stamp",
-    11: "Bullseye Stamp",
-    12: "Feather Stamp",
-    13: "Polearm Stamp",
-    14: "Violence Stamp"
+  official: {
+    0: {
+      0: "Sword Stamp",
+      1: "Heart Stamp",
+      2: "Mana Stamp",
+      3: "Tomahawk Stamp",
+      4: "Target Stamp",
+      5: "Shield Stamp",
+      6: "Longsword Stamp",
+      7: "Kapow Stamp",
+      8: "Fist Stamp",
+      9: "Battleaxe Stamp",
+      10: "Agile Stamp",
+      11: "Vitality Stamp",
+      12: "Book Stamp",
+      13: "Manamoar Stamp",
+      14: "Clover Stamp",
+      15: "Scimitar Stamp",
+      16: "Bullseye Stamp",
+      17: "Feather Stamp",
+      18: "Polearm Stamp",
+      19: "Violence Stamp",
+      20: "Buckler Stamp",
+      21: "Hermes Stamp",
+      22: "Sukka Foo",
+      23: "Arcane Stamp",
+      24: "Avast Yar Stamp",
+      25: "Steve Sword",
+      26: "Blover Stamp",
+      27: "Stat Graph Stamp",
+      28: "Gilded Axe Stamp",
+      29: "Diamond Axe Stamp",
+      30: "Tripleshot Stamp",
+      31: "Blackheart Stamp",
+      32: "Maxo Slappo Stamp",
+      33: "Sashe Sidestamp",
+      34: "Intellectostampo",
+      35: "Conjocharmo Stamp",
+      36: "Dementia Sword Stamp",
+      37: "Golden Sixes Stamp",
+      38: "Stat Wallstreet Stamp",
+      39: "Void Sword Stamp",
+      40: "Void Axe Stamp"
+    },
+    1: {
+      0: "Pickaxe Stamp",
+      1: "Hatchet Stamp",
+      2: "Anvil Zoomer Stamp",
+      3: "Lil' Mining Baggy Stamp",
+      4: "Twin Ores Stamp",
+      5: "Choppin' Bag Stamp",
+      6: "Duplogs Stamp",
+      7: "Matty Bag Stamp",
+      8: "Smart Dirt Stamp",
+      9: "Cool Diggy Tool Stamp",
+      10: "High IQ Lumber Stamp",
+      11: "Swag Swingy Tool Stamp",
+      12: "Alch Go Brrr Stamp",
+      13: "Brainstew Stamps",
+      14: "Drippy Drop Stamp",
+      15: "Droplots Stamp",
+      16: "Fishing Rod Stamp",
+      17: "Fishhead Stamp",
+      18: "Catch Net Stamp",
+      19: "Fly Intel Stamp",
+      20: "Bag o Heads Stamp",
+      21: "Holy Mackerel Stamp",
+      22: "Bugsack Stamp",
+      23: "Buzz Buzz Stamp",
+      24: "Hidey Box Stamp",
+      25: "Purp Froge Stamp",
+      26: "Spikemouth Stamp",
+      27: "Shiny Crab Stamp",
+      28: "Gear Stamp",
+      29: "Stample Stamp",
+      30: "Saw Stamp",
+      31: "Amplestample Stamp",
+      32: "SpoOoky Stamp",
+      33: "Flowin Stamp",
+      34: "Prayday Stamp",
+      35: "Banked Pts Stamp",
+      36: "Cooked Meal Stamp",
+      37: "Spice Stamp",
+      38: "Ladle Stamp",
+      39: "Nest Eggs Stamp",
+      40: "Egg Stamp",
+      41: "Lab Tube Stamp",
+      42: "Sailboat Stamp",
+      43: "Gamejoy Stamp",
+      44: "Divine Stamp",
+      45: "Multitool Stamp",
+      46: "Skelefish Stamp",
+      47: "Crop Evo Stamp",
+      48: "Sneaky Peeky Stamp",
+      49: "Jade Mint Stamp",
+      50: "Summoner Stone Stamp",
+      51: "White Essence Stamp",
+      52: "Triad Essence Stamp",
+      53: "Dark Triad Essence Stamp"
+    },
+    2: {
+      0: "Questin Stamp",
+      1: "Mason Jar Stamp",
+      2: "Crystallin",
+      3: "Arcade Ball Stamp",
+      4: "Apple Stamp",
+      5: "Gold Ball Stamp",
+      6: "Potion Stamp",
+      7: "Golden Apple Stamp",
+      8: "Ball Timer Stamp",
+      9: "Card Stamp",
+      10: "Vendor Stamp",
+      11: "Sigil Stamp",
+      12: "Talent I Stamp",
+      13: "Talent II Stamp",
+      14: "Talent III Stamp",
+      15: "Talent IV Stamp",
+      16: "Talent V Stamp",
+      17: "Talent S Stamp",
+      18: "Multikill Stamp",
+      19: "Biblio Stamp",
+      20: "DNA Stamp",
+      21: "Refinery Stamp",
+      22: "Atomic Stamp",
+      23: "Cavern Resource Stamp",
+      24: "Study Hall Stamp"
+    }
   },
-  1: {
-    0: "Pickaxe Stamp",
-    1: "Hatchet Stamp",
-    2: "Anvil Stamp",
-    3: "Fishing Rod Stamp",
-    4: "Catching Net Stamp",
-    5: "Worship Stamp",
-    6: "Trapping Stamp",
-    7: "Duple Logs Stamp",
-    8: "Matty Bag Stamp",
-    9: "Smart Dirt Stamp",
-    10: "Cool Diggy Tool Stamp",
-    11: "Oceanman Stamp",
-    12: "Swag Swingy Stamp",
-    13: "Alch Go Brrr Stamp",
-    14: "Lab Tube Stamp"
-  },
-  2: {
-    0: "Book Stamp",
-    1: "Storage Stamp",
-    2: "Mason Jar Stamp",
-    3: "Pocketwatch Stamp",
-    4: "Postage Stamp",
-    5: "Stat Graph Stamp",
-    6: "Talent I Stamp",
-    7: "Talent II Stamp",
-    8: "Talent III Stamp",
-    9: "Talent S Stamp",
-    10: "Multitool Stamp",
-    11: "Refinery Stamp",
-    12: "Crystal Stamp",
-    13: "Clover Stamp",
-    14: "DNA Stamp"
+  compact: {
+    0: [
+      "Sword Stamp","Heart Stamp","Mana Stamp","Tomahawk Stamp","Target Stamp","Shield Stamp",
+      "Longsword Stamp","Kapow Stamp","Fist Stamp","Battleaxe Stamp","Agile Stamp","Vitality Stamp",
+      "Book Stamp","Manamoar Stamp","Clover Stamp","Scimitar Stamp","Bullseye Stamp","Feather Stamp",
+      "Polearm Stamp","Violence Stamp","Buckler Stamp","Hermes Stamp","Sukka Foo","Arcane Stamp",
+      "Avast Yar Stamp","Steve Sword","Blover Stamp","Stat Graph Stamp","Gilded Axe Stamp",
+      "Diamond Axe Stamp","Tripleshot Stamp","Blackheart Stamp","Maxo Slappo Stamp",
+      "Sashe Sidestamp","Intellectostampo","Conjocharmo Stamp","Dementia Sword Stamp",
+      "Golden Sixes Stamp","Stat Wallstreet Stamp","Void Sword Stamp","Void Axe Stamp"
+    ],
+    1: [
+      "Pickaxe Stamp","Hatchet Stamp","Anvil Zoomer Stamp","Lil' Mining Baggy Stamp","Twin Ores Stamp",
+      "Choppin' Bag Stamp","Duplogs Stamp","Matty Bag Stamp","Smart Dirt Stamp","Cool Diggy Tool Stamp",
+      "High IQ Lumber Stamp","Swag Swingy Tool Stamp","Alch Go Brrr Stamp","Brainstew Stamps",
+      "Drippy Drop Stamp","Droplots Stamp","Fishing Rod Stamp","Fishhead Stamp","Catch Net Stamp",
+      "Fly Intel Stamp","Bag o Heads Stamp","Holy Mackerel Stamp","Bugsack Stamp","Buzz Buzz Stamp",
+      "Hidey Box Stamp","Purp Froge Stamp","Spikemouth Stamp","Shiny Crab Stamp","Gear Stamp",
+      "Stample Stamp","Saw Stamp","Amplestample Stamp","SpoOoky Stamp","Flowin Stamp","Prayday Stamp",
+      "Banked Pts Stamp","Cooked Meal Stamp","Spice Stamp","Ladle Stamp","Nest Eggs Stamp",
+      "Egg Stamp","Lab Tube Stamp","Sailboat Stamp","Gamejoy Stamp","Divine Stamp","Multitool Stamp",
+      "Skelefish Stamp","Crop Evo Stamp","Sneaky Peeky Stamp","Jade Mint Stamp",
+      "Summoner Stone Stamp","White Essence Stamp","Triad Essence Stamp","Dark Triad Essence Stamp"
+    ],
+    2: [
+      "Questin Stamp","Mason Jar Stamp","Crystallin","Arcade Ball Stamp","Apple Stamp",
+      "Gold Ball Stamp","Potion Stamp","Golden Apple Stamp","Ball Timer Stamp","Card Stamp",
+      "Vendor Stamp","Sigil Stamp","Talent I Stamp","Talent II Stamp","Talent III Stamp",
+      "Talent IV Stamp","Talent V Stamp","Talent S Stamp","Multikill Stamp","Biblio Stamp",
+      "DNA Stamp","Refinery Stamp","Atomic Stamp","Cavern Resource Stamp","Study Hall Stamp"
+    ]
   }
 };
 
@@ -134,6 +248,11 @@ const STAMP_COST_HINTS = {
   "Kapow Stamp": "Needs Trusty Nails.",
   "Fist Stamp": "Needs Bleach Logs.",
   "Battleaxe Stamp": "Needs Grass Leaf.",
+  "Agile Stamp": "Needs Copper Chopper.",
+  "Vitality Stamp": "Needs Snake Skin.",
+  "Book Stamp": "Needs Iron Bar.",
+  "Manamoar Stamp": "Needs Glublin Ear.",
+  "Clover Stamp": "Needs Iron Platebody.",
   "Scimitar Stamp": "Needs Goldfish.",
   "Bullseye Stamp": "Needs Sentient Cereal.",
   "Feather Stamp": "Needs Coconotnotto.",
@@ -141,13 +260,20 @@ const STAMP_COST_HINTS = {
   "Violence Stamp": "Needs Dementia Ore.",
   "Pickaxe Stamp": "Needs Oak Logs.",
   "Hatchet Stamp": "Needs Thread.",
-  "Anvil Stamp": "Needs Copper Ore.",
+  "Anvil Zoomer Stamp": "Needs Copper Ore.",
   "Matty Bag Stamp": "Needs Cramped Material Pouch.",
   "Smart Dirt Stamp": "Needs Plank.",
   "Cool Diggy Tool Stamp": "Needs Iron Hatchet.",
+  "Alch Go Brrr Stamp": "Needs Forest Fibres.",
+  "Fishing Rod Stamp": "Needs Fly.",
+  "Catch Net Stamp": "Needs Goldfish.",
+  "Lab Tube Stamp": "Needs Bottle Cap.",
   "Mason Jar Stamp": "Needs Glass Shard.",
+  "Biblio Stamp": "Needs Tundra Logs.",
+  "DNA Stamp": "Needs Worker Bee.",
   "Refinery Stamp": "Needs Cheesy Crumbs.",
-  "DNA Stamp": "Needs Worker Bee."
+  "Atomic Stamp": "Needs Bamboo.",
+  "Study Hall Stamp": "Needs Villager Statue."
 };
 
 let lastResult = null;
@@ -256,25 +382,24 @@ function inferStage(data) {
   return "late";
 }
 
-function makeStampName(tabIndex, slotIndex) {
-  const stampName = STAMP_NAME_MAP[tabIndex]?.[slotIndex] || `Unknown Stamp ${slotIndex + 1}`;
-  return `Stamp Tab ${tabIndex + 1} - ${stampName}`;
-}
-
-/*
-  This supports BOTH:
-  - 0-based payloads: bubble index 0 => first bubble
-  - 1-based payloads: bubble index 1 => first bubble
-*/
 function getBubbleNameOnly(cauldronIndex, bubbleIndex) {
   const list = BUBBLE_NAMES[cauldronIndex] || [];
   return list[bubbleIndex] || list[bubbleIndex - 1] || `Unknown Bubble ${bubbleIndex + 1}`;
 }
 
-function makeBubbleName(cauldronIndex, bubbleIndex) {
-  const cauldronName = CAULDRON_NAMES[cauldronIndex] || `Cauldron ${cauldronIndex + 1}`;
-  const bubbleName = getBubbleNameOnly(cauldronIndex, bubbleIndex);
-  return `${bubbleName} (${cauldronName})`;
+function getStampNameOnly(tabIndex, slotIndex) {
+  const official = STAMP_NAME_MAP.official?.[tabIndex]?.[slotIndex];
+  if (official) return official;
+
+  const compact = STAMP_NAME_MAP.compact?.[tabIndex]?.[slotIndex];
+  if (compact) return compact;
+
+  return null;
+}
+
+function makeStampName(tabIndex, slotIndex) {
+  const stampName = getStampNameOnly(tabIndex, slotIndex);
+  return stampName || `Stamp Tab ${tabIndex + 1} - Slot ${slotIndex + 1}`;
 }
 
 function findNumbersDeep(node, path = [], hits = []) {
@@ -806,6 +931,44 @@ function sortRecommendations(recs, mode) {
   return out.sort((a, b) => b.score - a.score);
 }
 
+function extractAllStamps(data) {
+  const stampLv = getNested(data, ["StampLv"], []);
+  const stampMax = getNested(data, ["StampLvM"], []);
+
+  if (!Array.isArray(stampLv)) return [];
+
+  const out = [];
+
+  stampLv.forEach((tab, tabIndex) => {
+    if (!tab || typeof tab !== "object") return;
+
+    const maxTab = stampMax[tabIndex] && typeof stampMax[tabIndex] === "object"
+      ? stampMax[tabIndex]
+      : {};
+
+    Object.entries(tab).forEach(([key, value]) => {
+      if (key === "length") return;
+
+      const slotIndex = Number(key);
+      const cur = Number(value);
+      const mx = Number(maxTab[key] ?? cur);
+
+      out.push({
+        tabIndex,
+        slotIndex,
+        title: makeStampName(tabIndex, slotIndex),
+        currentLevel: cur,
+        maxLevel: mx
+      });
+    });
+  });
+
+  return out.sort((a, b) => {
+    if (a.tabIndex !== b.tabIndex) return a.tabIndex - b.tabIndex;
+    return a.slotIndex - b.slotIndex;
+  });
+}
+
 function rankRecommendations(data) {
   const stage = inferStage(data);
   const libraryState = extractLibraryState(data);
@@ -870,7 +1033,7 @@ function rankRecommendations(data) {
     }
   ];
 
-  return { recs, categoryCounts, quality, stage, libraryState };
+  return { recs, categoryCounts, quality, stage, libraryState, rawData: data };
 }
 
 function renderPrimary(best, stage) {
@@ -1042,6 +1205,28 @@ function renderSectionSummaries(result) {
   }
 }
 
+function renderAllStamps(result) {
+  const stampList = $("allStampList");
+  if (!stampList) return;
+
+  const stamps = extractAllStamps(result.rawData);
+
+  if (!stamps.length) {
+    stampList.innerHTML = `<div class="quality-card"><div class="muted">No stamp data found.</div></div>`;
+    return;
+  }
+
+  stampList.innerHTML = stamps.map(stamp => `
+    <div class="quality-card">
+      <div class="rec-top">
+        <strong>${stamp.title}</strong>
+        <span class="tag">${stamp.currentLevel}/${stamp.maxLevel}</span>
+      </div>
+      <div class="muted">Tab ${stamp.tabIndex + 1}, Slot ${stamp.slotIndex + 1}</div>
+    </div>
+  `).join("");
+}
+
 function renderRecommendations() {
   if (!lastResult) return;
 
@@ -1065,8 +1250,8 @@ function renderRecommendations() {
     }
 
     recommendationList.innerHTML = Object.entries(grouped).map(([groupName, items]) => `
-      <div class="panel compact-panel">
-        <h4 class="group-title">${groupName} Cauldron</h4>
+      <div class="panel" style="padding:16px;">
+        <h4 style="margin-top:0;">${groupName} Cauldron</h4>
         <div class="stack">
           ${items.map(rec => renderRecCard(rec)).join("")}
         </div>
@@ -1105,6 +1290,7 @@ function renderResults(result) {
   renderSectionSummaries(result);
   renderLibraryOverview(result);
   renderRecommendations();
+  renderAllStamps(result);
 
   const top3List = $("top3List");
   if (top3List) {
@@ -1133,6 +1319,7 @@ function clearResults() {
   const recommendationList = $("recommendationList");
   const libraryOverview = $("libraryOverview");
   const qualityList = $("qualityList");
+  const allStampList = $("allStampList");
   const bookAlert = $("bookAlert");
   const top3Summary = $("top3Summary");
   const recommendationSummary = $("recommendationSummary");
@@ -1144,6 +1331,7 @@ function clearResults() {
   if (recommendationList) recommendationList.innerHTML = "";
   if (libraryOverview) libraryOverview.innerHTML = "";
   if (qualityList) qualityList.innerHTML = "";
+  if (allStampList) allStampList.innerHTML = "";
 
   if (bookAlert) {
     bookAlert.innerHTML = "";
