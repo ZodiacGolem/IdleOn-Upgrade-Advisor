@@ -14,7 +14,7 @@
         <p class="eyebrow">IdleOn Tool</p>
         <h1>IdleOn Upgrade Advisor</h1>
         <p class="subtitle">
-          Cleaner upgrade recommendations with named stamps, named bubbles, library tracking, icons, and best-upgrade sorting.
+          Cleaner upgrade recommendations with named stamps, named bubbles, library tracking, and better readability.
         </p>
       </div>
     </header>
@@ -31,9 +31,9 @@
         >
 
         <div class="button-row">
-          <button id="analyzeBtn">Analyze Profile</button>
-          <button id="demoBtn" class="secondary">Load Demo</button>
-          <button id="clearBtn" class="secondary">Clear</button>
+          <button id="analyzeBtn" type="button">Analyze Profile</button>
+          <button id="demoBtn" class="secondary" type="button">Load Demo</button>
+          <button id="clearBtn" class="secondary" type="button">Clear</button>
         </div>
 
         <details class="json-box">
@@ -48,7 +48,7 @@
         <div class="help-box">
           <strong>What this version shows</strong>
           <p>
-            Stamp names, bubble names, books waiting for checkout, library speed, max books, icons, and recommendations sorted by best score.
+            Named recommendations, books waiting for checkout, library overview, Top 3 upgrades, and all detected stamps from the payload.
           </p>
         </div>
 
@@ -59,7 +59,7 @@
         <div id="emptyState" class="panel empty-state">
           <div>
             <h2>No profile loaded</h2>
-            <p>Analyze a profile to see best upgrades, library overview, and named recommendations.</p>
+            <p>Analyze a profile to see upgrades, library info, and all detected stamps.</p>
           </div>
         </div>
 
@@ -138,6 +138,18 @@
             </div>
 
             <div id="recommendationList" class="stack"></div>
+          </section>
+
+          <section class="panel">
+            <div class="section-head">
+              <div>
+                <h3>All Detected Stamps</h3>
+                <p class="muted section-summary">
+                  This shows every stamp found in the payload, even if it is not currently recommended.
+                </p>
+              </div>
+            </div>
+            <div id="allStampList" class="stack"></div>
           </section>
         </div>
       </section>
