@@ -72,7 +72,7 @@ h1 {
 
 .result-column {
   display: grid;
-  gap: 18px;
+  gap: 22px;
 }
 
 .panel,
@@ -81,12 +81,16 @@ h1 {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  padding: 20px;
+  padding: 22px;
 }
 
 .primary-card {
   background: linear-gradient(180deg, rgba(121, 169, 255, 0.12), rgba(121, 169, 255, 0.03));
   border-color: rgba(121, 169, 255, 0.2);
+}
+
+.compact-panel {
+  padding: 16px;
 }
 
 label {
@@ -265,7 +269,6 @@ button:hover,
 
 .card-top,
 .rec-top,
-.breakdown-top,
 .section-head {
   display: flex;
   justify-content: space-between;
@@ -312,6 +315,12 @@ button:hover,
   font-size: 0.92rem;
 }
 
+.section-summary {
+  margin: 6px 0 0;
+  max-width: 760px;
+  font-size: 0.96rem;
+}
+
 .stat-grid,
 .kpi-grid,
 .two-col,
@@ -340,13 +349,12 @@ button:hover,
 .mini-stat,
 .kpi,
 .rec-card,
-.breakdown-row,
 .quality-card,
 .cost-box {
   background: var(--panel-2);
   border: 1px solid var(--border);
   border-radius: 16px;
-  padding: 14px;
+  padding: 16px;
 }
 
 .kpi span,
@@ -374,29 +382,53 @@ button:hover,
 
 .rec-title {
   margin: 0 0 6px;
-  font-size: 1rem;
+  font-size: 1.08rem;
+  line-height: 1.3;
 }
 
 .cost-box {
   margin-top: 12px;
-  background: rgba(11, 16, 32, 0.25);
+  background: rgba(11, 16, 32, 0.15);
+  border-color: rgba(43, 58, 96, 0.7);
 }
 
-.bar {
-  margin-top: 10px;
-  height: 10px;
-  width: 100%;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.06);
-  overflow: hidden;
-  border: 1px solid var(--border);
+.group-title {
+  margin: 0 0 12px;
 }
 
-.bar > span {
-  display: block;
-  height: 100%;
-  border-radius: 999px;
-  background: linear-gradient(90deg, var(--good), var(--accent));
+.book-alert {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 14px;
+  align-items: center;
+  padding: 16px 18px;
+  border-radius: 18px;
+  background: rgba(79, 211, 154, 0.12);
+  border: 1px solid rgba(79, 211, 154, 0.3);
+  box-shadow: var(--shadow);
+}
+
+.book-alert-icon {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background: rgba(79, 211, 154, 0.16);
+  border: 1px solid rgba(79, 211, 154, 0.24);
+  font-size: 1.6rem;
+}
+
+.book-alert-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #dffbee;
+}
+
+.book-alert-text {
+  margin-top: 4px;
+  color: #c8f5e1;
+  line-height: 1.4;
 }
 
 .hidden {
@@ -414,7 +446,8 @@ button:hover,
   .two-col,
   .stat-grid,
   .primary-main,
-  .rec-main {
+  .rec-main,
+  .book-alert {
     grid-template-columns: 1fr;
   }
 
