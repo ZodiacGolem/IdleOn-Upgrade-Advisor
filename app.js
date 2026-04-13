@@ -688,7 +688,7 @@ function buildLibraryRecs(data, stage) {
         catchUp: 5,
         confidence: state.source === "explicit" ? 8 : 5
       }),
-      why: `You currently have ${state.currentBooks} available book${state.currentBooks === 1 ? "" : "s"}.`,
+      why: `You currently have ${state.currentBooks} book${state.currentBooks === 1 ? "" : "s"} waiting for checkout.`,
       detail: state.currentBooks > 0
         ? "Unused books are immediate value if you have strong talents ready to push."
         : "No spare books detected right now.",
@@ -843,7 +843,7 @@ function rankRecommendations(data) {
       detail: Array.isArray(bubbles) && bubbles.length > 0 ? "Named bubble recommendations enabled." : "Missing from payload."
     },
     {
-      label: "Library current books",
+      label: "Books waiting for checkout",
       found: libraryState.currentBooks != null,
       detail: libraryState.currentBooks != null
         ? `Detected ${libraryState.currentBooks} books (${libraryState.source}).`
@@ -940,9 +940,11 @@ function renderLibraryOverview(result) {
   const library = result.libraryState;
   const cards = [
     {
-      label: "Current books",
+      label: "Books waiting for checkout",
       value: library.currentBooks != null ? library.currentBooks : "?",
-      detail: library.currentBooks != null ? `Detected via ${library.source} lookup.` : "Not confidently found in this payload.",
+      detail: library.currentBooks != null
+        ? `Detected via ${library.source} lookup. These are ready to spend now.`
+        : "Not confidently found in this payload.",
       iconKey: "library-books",
       fallback: "📚"
     },
@@ -983,23 +985,61 @@ function renderLibraryOverview(result) {
   `).join("");
 }
 
-function renderCategoryBreakdown(categoryCounts) {
-  const categoryBreakdown = $("categoryBreakdown");
-  if (!categoryBreakdown) return;
+function renderBookAlert(result) {
+  const wrap = $("bookAlert");
+  if (!wrap) return;
 
-  const maxCategoryCount = Math.max(...Object.values(categoryCounts), 1);
-  categoryBreakdown.innerHTML = Object.entries(categoryCounts)
-    .sort((a, b) => b[1] - a[1])
-    .map(([name, count]) => `
-      <div class="breakdown-row">
-        <div class="breakdown-top">
-          <strong>${name}</strong>
-          <span>${count}</span>
+  const books = result?.libraryState?.currentBooks;
+
+  if (typeof books === "number" && books > 20) {
+    wrap.classList.remove("hidden");
+    wrap.innerHTML = `
+      <div class="book-alert">
+        <div class="book-alert-icon">📚</div>
+        <div>
+          <div class="book-alert-title">Books waiting for checkout: ${books}</div>
+          <div class="book-alert-text">
+            You have more than 20 books waiting. This is a strong time to pull a max-level book on checkout.
+          </div>
         </div>
-        <div class="bar"><span style="width:${(count / maxCategoryCount) * 100}%"></span></div>
       </div>
-    `)
-    .join("");
+    `;
+    return;
+  }
+
+  wrap.classList.add("hidden");
+  wrap.innerHTML = "";
+}
+
+function renderSectionSummaries(result) {
+  const top3Summary = $("top3Summary");
+  const recommendationSummary = $("recommendationSummary");
+
+  const bestSorted = sortRecommendations(result.recs, "score-desc");
+  const books = result.libraryState.currentBooks;
+  const best = bestSorted[0];
+
+  const categoryCounts = Object.entries(result.categoryCounts)
+    .sort((a, b) => b[1] - a[1]);
+
+  const topCategory = categoryCounts[0]?.[0] || "Unknown";
+  const topCategoryCount = categoryCounts[0]?.[1] || 0;
+
+  if (top3Summary) {
+    top3Summary.textContent = best
+      ? `Best current push is ${best.title}. Top picks are ordered by score and meant to be your fastest high-value upgrades.`
+      : "";
+  }
+
+  if (recommendationSummary) {
+    const booksText =
+      typeof books === "number"
+        ? `${books} book${books === 1 ? "" : "s"} waiting for checkout`
+        : "library books not confidently detected";
+
+    recommendationSummary.textContent =
+      `Most suggestions are in ${topCategory} (${topCategoryCount}). You currently have ${booksText}.`;
+  }
 }
 
 function renderRecommendations() {
@@ -1025,8 +1065,8 @@ function renderRecommendations() {
     }
 
     recommendationList.innerHTML = Object.entries(grouped).map(([groupName, items]) => `
-      <div class="panel" style="padding:16px;">
-        <h4 style="margin-top:0;">${groupName} Cauldron</h4>
+      <div class="panel compact-panel">
+        <h4 class="group-title">${groupName} Cauldron</h4>
         <div class="stack">
           ${items.map(rec => renderRecCard(rec)).join("")}
         </div>
@@ -1061,8 +1101,9 @@ function renderResults(result) {
   if ($("kpiBooks")) $("kpiBooks").textContent = result.libraryState.currentBooks != null ? result.libraryState.currentBooks : "?";
   if ($("kpiBest")) $("kpiBest").textContent = best.score;
 
+  renderBookAlert(result);
+  renderSectionSummaries(result);
   renderLibraryOverview(result);
-  renderCategoryBreakdown(result.categoryCounts);
   renderRecommendations();
 
   const top3List = $("top3List");
@@ -1091,8 +1132,10 @@ function clearResults() {
   const top3List = $("top3List");
   const recommendationList = $("recommendationList");
   const libraryOverview = $("libraryOverview");
-  const categoryBreakdown = $("categoryBreakdown");
   const qualityList = $("qualityList");
+  const bookAlert = $("bookAlert");
+  const top3Summary = $("top3Summary");
+  const recommendationSummary = $("recommendationSummary");
 
   if (results) results.classList.add("hidden");
   if (emptyState) emptyState.classList.remove("hidden");
@@ -1100,8 +1143,15 @@ function clearResults() {
   if (top3List) top3List.innerHTML = "";
   if (recommendationList) recommendationList.innerHTML = "";
   if (libraryOverview) libraryOverview.innerHTML = "";
-  if (categoryBreakdown) categoryBreakdown.innerHTML = "";
   if (qualityList) qualityList.innerHTML = "";
+
+  if (bookAlert) {
+    bookAlert.innerHTML = "";
+    bookAlert.classList.add("hidden");
+  }
+
+  if (top3Summary) top3Summary.textContent = "";
+  if (recommendationSummary) recommendationSummary.textContent = "";
 
   lastResult = null;
 }
