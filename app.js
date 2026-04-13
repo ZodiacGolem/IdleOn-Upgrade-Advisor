@@ -256,16 +256,25 @@ function inferStage(data) {
   return "late";
 }
 
-function makeBubbleName(cauldronIndex, bubbleIndex) {
-  const cauldronName = CAULDRON_NAMES[cauldronIndex] || `Cauldron ${cauldronIndex + 1}`;
-  const bubbleName = BUBBLE_NAMES[cauldronIndex]?.[bubbleIndex] || `Unknown Bubble ${bubbleIndex + 1}`;
-  
-  return `${bubbleName} (${cauldronName})`;
+function makeStampName(tabIndex, slotIndex) {
+  const stampName = STAMP_NAME_MAP[tabIndex]?.[slotIndex] || `Unknown Stamp ${slotIndex + 1}`;
+  return `Stamp Tab ${tabIndex + 1} - ${stampName}`;
 }
 
-function makeStampName(tabIndex, slotIndex) {
-  const stampName = STAMP_NAME_MAP[tabIndex]?.[slotIndex] || `Stamp ${slotIndex + 1}`;
-  return `Stamp Tab ${tabIndex + 1} - ${stampName}`;
+/*
+  This supports BOTH:
+  - 0-based payloads: bubble index 0 => first bubble
+  - 1-based payloads: bubble index 1 => first bubble
+*/
+function getBubbleNameOnly(cauldronIndex, bubbleIndex) {
+  const list = BUBBLE_NAMES[cauldronIndex] || [];
+  return list[bubbleIndex] || list[bubbleIndex - 1] || `Unknown Bubble ${bubbleIndex + 1}`;
+}
+
+function makeBubbleName(cauldronIndex, bubbleIndex) {
+  const cauldronName = CAULDRON_NAMES[cauldronIndex] || `Cauldron ${cauldronIndex + 1}`;
+  const bubbleName = getBubbleNameOnly(cauldronIndex, bubbleIndex);
+  return `${bubbleName} (${cauldronName})`;
 }
 
 function findNumbersDeep(node, path = [], hits = []) {
@@ -604,7 +613,6 @@ function buildBubbleRecs(data, stage) {
 
       const bubbleIndex = Number(key);
       const lvl = Number(value);
-
       if (!Number.isFinite(lvl) || lvl < 1) return;
 
       let impact = 0;
@@ -627,12 +635,13 @@ function buildBubbleRecs(data, stage) {
         return;
       }
 
-      const bubbleName = BUBBLE_NAMES[groupIndex]?.[bubbleIndex] || `Unknown Bubble ${bubbleIndex + 1}`;
       const cauldronName = CAULDRON_NAMES[groupIndex] || `Cauldron ${groupIndex + 1}`;
+      const bubbleName = getBubbleNameOnly(groupIndex, bubbleIndex);
 
       recs.push({
-        title: bubbleName,
-        groupTitle: cauldronName,
+        title: `${bubbleName} (${cauldronName})`,
+        bubbleName,
+        cauldronName,
         category: "Bubbles",
         subcategory: cauldronName,
         impact: Math.round(impact),
@@ -651,40 +660,6 @@ function buildBubbleRecs(data, stage) {
         currentLevel: lvl,
         nextTarget: lvl + 1,
         costText: "Exact bubble cost not available from current payload.",
-        iconKey: `bubble-${groupIndex}-${bubbleIndex}`,
-        fallback: "🫧"
-      });
-    });
-  });
-
-  return recs;
-}
-
-      const name = makeBubbleName(groupIndex, bubbleIndex);
-      let costText = "Exact bubble cost not available from current payload.";
-      if (name === "Ignore Overdues") {
-        costText = "Library-related bubble. Exact material cost needs richer payload data.";
-      }
-
-      recs.push({
-        title: name,
-        category: "Bubbles",
-        impact: Math.round(impact),
-        effort,
-        confidence: 6,
-        score: scoreFormula({
-          impact,
-          effort,
-          urgency,
-          accountWide: 5.5,
-          catchUp: stage === "early" ? 7 : 5,
-          confidence: 6
-        }),
-        why: `${name} is at level ${lvl}, which is still a useful catch-up range.`,
-        detail: `From the ${CAULDRON_NAMES[groupIndex] || `Cauldron ${groupIndex + 1}`} cauldron.`,
-        currentLevel: lvl,
-        nextTarget: lvl + 1,
-        costText,
         iconKey: `bubble-${groupIndex}-${bubbleIndex}`,
         fallback: "🫧"
       });
@@ -818,18 +793,9 @@ function dedupeRecommendations(recs) {
 function sortRecommendations(recs, mode) {
   const out = [...recs];
 
-  if (mode === "score-asc") {
-    return out.sort((a, b) => a.score - b.score);
-  }
-
-  if (mode === "title-asc") {
-    return out.sort((a, b) => a.title.localeCompare(b.title));
-  }
-
-  if (mode === "title-desc") {
-    return out.sort((a, b) => b.title.localeCompare(a.title));
-  }
-
+  if (mode === "score-asc") return out.sort((a, b) => a.score - b.score);
+  if (mode === "title-asc") return out.sort((a, b) => a.title.localeCompare(b.title));
+  if (mode === "title-desc") return out.sort((a, b) => b.title.localeCompare(a.title));
   if (mode === "category-asc") {
     return out.sort((a, b) => {
       const cmp = a.category.localeCompare(b.category);
@@ -1072,6 +1038,16 @@ function renderRecommendations() {
 
   recommendationList.innerHTML = filtered.map(rec => renderRecCard(rec)).join("");
 }
+
+function renderResults(result) {
+  lastResult = result;
+
+  const bestSorted = sortRecommendations(result.recs, "score-desc");
+  const best = bestSorted[0];
+
+  if (!best) {
+    throw new Error("No recommendations were produced from this profile.");
+  }
 
   const emptyState = $("emptyState");
   const results = $("results");
